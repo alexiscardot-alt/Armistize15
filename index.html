@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soiree Candidats</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --gold: #f59e0b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 25px;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: var(--text);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: var(--accent-hover);
+    }
+
+    .result-card {
+      margin-top: 25px;
+      padding: 20px;
+      border-radius: 12px;
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid var(--accent);
+      display: none;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    .result-card.active {
+      display: block;
+    }
+
+    .result-title {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+    }
+
+    .candidate-name {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: var(--gold);
+    }
+
+    .error-msg {
+      color: #ef4444;
+      font-size: 0.9rem;
+      margin-top: 10px;
+      display: none;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Soiree Candidats</h1>
+    <p class="subtitle">Entrez le mot de passe secret recu par message !</p>
+
+    <div class="input-group">
+      <label for="passInput">Code Secret</label>
+      <input type="password" id="passInput" placeholder="Entrez votre code..." onkeyup="if(event.key === 'Enter') revealCandidate()">
+    </div>
+
+    <button onclick="revealCandidate()">Decouvrir mon candidat</button>
+    <div id="error" class="error-msg">Code incorrect !</div>
+
+    <div id="result" class="result-card">
+      <div class="result-title">Votre candidat attribue est :</div>
+      <div id="candidate" class="candidate-name"></div>
+    </div>
+  </div>
+
+  <script>
+    // Association Mots de Passe -> Candidats
+    const passwords = {
+      "ghi75": "Marine Le Pen",
+      "aym23": "Eric Zemmour",
+      "ale94": "Retailleau / Lisnard",
+      "tan12": "Glucksmann",
+      "gc48": "Tondelier",
+      "gd91": "Melenchon",
+      "jb33": "Roussel",
+      "stu88": "Attal",
+      "seb06": "Philippe",
+      "cle19": "Riner",
+      "edw00": "Mr White"
+    };
+
+    function revealCandidate() {
+      const input = document.getElementById('passInput');
+      const passValue = input.value.trim().toLowerCase();
+      const resultCard = document.getElementById('result');
+      const candidateDiv = document.getElementById('candidate');
+      const errorDiv = document.getElementById('error');
+
+      if (!passValue) {
+        errorDiv.textContent = "Veuillez entrer un code secret.";
+        errorDiv.style.display = 'block';
+        resultCard.classList.remove('active');
+        return;
+      }
+
+      if (passwords[passValue]) {
+        errorDiv.style.display = 'none';
+        candidateDiv.textContent = passwords[passValue];
+        resultCard.classList.add('active');
+      } else {
+        errorDiv.textContent = "Code secret invalide !";
+        errorDiv.style.display = 'block';
+        resultCard.classList.remove('active');
+      }
+    }
+  </script>
+</body>
+</html>
